@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Earring Collection — Aurelia Jewels</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#d4af37;--gold-light:#f7e7a9;--gold-dim:#7a621a;--dark1:#0d0d0d;--dark2:#111;--dark3:#1a1a1a;--dark4:#222;--border:rgba(212,175,55,0.22);--text:#f0e8d0;--muted:#8a7d65}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--dark1);color:var(--text)}
+.navbar{display:flex;align-items:center;justify-content:space-between;padding:12px 36px;width:100%;box-sizing:border-box;background:rgba(7,7,7,0.92);backdrop-filter:blur(16px);position:fixed;top:0;left:0;z-index:1000;border-bottom:1px solid var(--border)}
+.logo{display:flex;flex-direction:column;line-height:1}
+.logo-main{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;letter-spacing:3px;background:linear-gradient(90deg,#d4af37,#f7e7a9,#d4af37);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 4s linear infinite}
+.logo-sub{font-size:9px;letter-spacing:5px;color:var(--gold-dim);text-transform:uppercase;margin-top:2px}
+@keyframes shimmer{0%{background-position:-100%}100%{background-position:200%}}
+.nav-list{display:flex;list-style:none;gap:26px}
+.nav-list li a{text-decoration:none;color:rgba(240,232,208,0.75);font-size:13px;position:relative;transition:color 0.3s}
+.nav-list li a::after{content:'';width:0;height:1px;background:var(--gold);position:absolute;left:0;bottom:-4px;transition:0.3s}
+.nav-list li a:hover,.nav-list li a.active{color:var(--gold)}
+.nav-list li a:hover::after,.nav-list li a.active::after{width:100%}
+.breadcrumb{display:flex;align-items:center;gap:8px;padding:100px 5% 0;font-size:12px;color:var(--muted)}
+.breadcrumb a{color:var(--muted);text-decoration:none;transition:color 0.3s}
+.breadcrumb a:hover{color:var(--gold)}
+.breadcrumb span{color:var(--gold)}
+.page-hero{padding:28px 5% 60px;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:0;right:0;width:400px;height:400px;background:radial-gradient(circle,rgba(212,175,55,0.06) 0%,transparent 70%);pointer-events:none}
+.hero-inner{display:flex;align-items:center;gap:60px}
+.hero-text{flex:1}
+.hero-emoji{font-size:100px;flex-shrink:0;filter:drop-shadow(0 0 30px rgba(212,175,55,0.3))}
+.eyebrow{font-size:10px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--gold)}
+.hero-text h1{font-family:'Playfair Display',serif;font-size:clamp(36px,5vw,62px);color:var(--text);margin-bottom:14px;line-height:1.1}
+.hero-text p{color:var(--muted);font-size:15px;line-height:1.8;max-width:500px;margin-bottom:28px}
+.hero-stats{display:flex;gap:32px}
+.hstat .num{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold)}
+.hstat .lbl{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:2px}
+.filters{padding:0 5% 40px;display:flex;gap:10px;flex-wrap:wrap}
+.filter-btn{padding:8px 20px;border:1px solid var(--border);border-radius:50px;background:transparent;color:var(--muted);font-size:12px;letter-spacing:1px;cursor:pointer;transition:0.3s}
+.filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(212,175,55,0.08)}
+.products-section{padding:0 5% 90px}
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.pcard{background:var(--dark3);border-radius:20px;overflow:hidden;border:1px solid rgba(212,175,55,0.1);transition:transform 0.4s,box-shadow 0.4s,border-color 0.4s;display:flex;flex-direction:column;height:430px}
+.pcard:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(0,0,0,0.5),0 0 0 1px rgba(212,175,55,0.3);border-color:rgba(212,175,55,0.3)}
+.pcard-img{width:100%;height:230px;overflow:hidden;flex-shrink:0}
+.pcard-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s}
+.pcard:hover .pcard-img img{transform:scale(1.08)}
+.pcard-body{padding:16px 18px;display:flex;flex-direction:column;flex:1}
+.pcard-tag{font-size:10px;letter-spacing:2px;color:var(--gold-dim);text-transform:uppercase;margin-bottom:6px}
+.pcard-name{font-family:'Playfair Display',serif;color:var(--text);font-size:15px;margin-bottom:4px;min-height:36px;display:flex;align-items:center}
+.pcard-price{color:var(--gold);font-weight:600;font-size:15px}
+.pcard-actions{display:flex;gap:8px;margin-top:auto}
+.shop-btn{flex:1;padding:10px;border:none;border-radius:25px;background:linear-gradient(135deg,#d4af37,#f7e7a9);color:#1a0f00;font-weight:600;font-size:13px;cursor:pointer;transition:0.3s}
+.shop-btn:hover{box-shadow:0 0 20px rgba(212,175,55,0.5);transform:scale(1.03)}
+.add-cart-btn{width:38px;height:38px;border:1px solid var(--border);border-radius:50%;background:transparent;color:var(--gold);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:0.3s;flex-shrink:0}
+.add-cart-btn:hover{background:var(--gold);color:#000;border-color:var(--gold)}
+.fade-in{opacity:0;transform:translateY(24px);transition:0.7s ease}
+.fade-in.show{opacity:1;transform:translateY(0)}
+.mini-footer{background:#050505;border-top:1px solid var(--border);padding:30px 5%;display:flex;align-items:center;justify-content:space-between}
+.mini-footer p{color:var(--muted);font-size:12px}
+.back-link{color:var(--gold);text-decoration:none;font-size:13px;transition:opacity 0.3s}
+.back-link:hover{opacity:0.7}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--dark4);border:1px solid var(--gold);color:var(--gold);padding:12px 28px;border-radius:50px;font-size:13px;letter-spacing:1px;opacity:0;pointer-events:none;transition:opacity 0.3s,transform 0.3s;z-index:9999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:900px){.products-grid{grid-template-columns:repeat(2,1fr)}.hero-inner{flex-direction:column;text-align:center}.hero-emoji{font-size:70px}}
+@media(max-width:540px){.products-grid{grid-template-columns:1fr}}
+</style>
+
+<style>
+.nav-cart-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: #1a0f00;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 18px; height: 18px;
+  line-height: 18px;
+  text-align: center;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+</style>
+<style>
+/* ═══════════════════════════════════════════
+   HAMBURGER MENU
+═══════════════════════════════════════════ */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px; height: 36px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 6px;
+  transition: border-color 0.3s;
+  flex-shrink: 0;
+}
+.hamburger:hover { border-color: var(--gold); }
+.hamburger span {
+  display: block;
+  width: 100%; height: 1.5px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: 0.35s;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Mobile nav drawer */
+.mobile-nav {
+  display: block;
+  position: fixed;
+  top: 57px; left: 0; right: 0;
+  background: rgba(7,7,7,0.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  z-index: 999;
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s;
+}
+.mobile-nav.open {
+  max-height: 400px;
+  padding: 12px 0 20px;
+}
+.mobile-nav a {
+  display: block;
+  padding: 13px 28px;
+  font-size: 15px;
+  color: rgba(240,232,208,0.8);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(212,175,55,0.07);
+  transition: color 0.2s, background 0.2s;
+  letter-spacing: 0.5px;
+}
+.mobile-nav a:last-child { border-bottom: none; }
+.mobile-nav a:hover, .mobile-nav a.active { color: var(--gold); background: rgba(212,175,55,0.05); }
+
+/* ═══════════════════════════════════════════
+   GLOBAL RESPONSIVE — ALL PAGES
+═══════════════════════════════════════════ */
+
+/* ── 1200px: tighten navbar padding ── */
+@media (max-width: 1200px) {
+  .navbar { padding: 12px 24px; }
+  .nav-list { gap: 18px; }
+}
+
+/* ── 900px: tablet ── */
+@media (max-width: 900px) {
+  /* Navbar */
+  .nav-list { display: none; }
+  .hamburger { display: flex; }
+
+  /* Product pages hero */
+  .hero-inner { flex-direction: column; gap: 24px; text-align: center; }
+  .hero-text p { margin: 0 auto 20px; }
+  .hero-stats { justify-content: center; }
+  .eyebrow { justify-content: center; }
+  .eyebrow::before { display: none; }
+  .hero-emoji { font-size: 70px; }
+  .breadcrumb { padding-top: 76px; }
+
+  /* Products grid → 2 col */
+  .products-grid { grid-template-columns: repeat(2,1fr); gap: 16px; }
+  .pcard { height: auto; }
+  .pcard-img { height: 180px; }
+
+  /* Collections page */
+  .cat-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .cat-card { height: 300px; }
+  .cat-info h2 { font-size: 26px; }
+
+  /* Footer */
+  .mini-footer { flex-direction: column; gap: 10px; text-align: center; }
+  .back-home, .back-link { margin: 0 auto; }
+
+  /* Nav-right (collections page) */
+  .nav-right { display: none; }
+}
+
+/* ── 600px: large phone ── */
+@media (max-width: 600px) {
+  .navbar { padding: 10px 16px; }
+
+  /* Product pages hero */
+  .page-hero { padding: 16px 4% 36px; }
+  .hero-text h1 { font-size: clamp(28px, 7vw, 44px); }
+  .hero-text p { font-size: 13px; }
+  .hero-stats { gap: 20px; }
+  .hstat .num { font-size: 20px; }
+  .breadcrumb { padding: 74px 4% 0; font-size: 11px; gap: 4px; }
+
+  /* Filters */
+  .filters { padding: 0 4% 28px; gap: 8px; }
+  .filter-btn { padding: 7px 14px; font-size: 11px; }
+
+  /* Products → 1 col */
+  .products-grid { grid-template-columns: 1fr; gap: 14px; }
+  .products-section { padding: 0 4% 60px; }
+  .pcard { height: auto; }
+  .pcard-img { height: 220px; }
+
+  /* Collections cards → 1 col */
+  .cat-grid { grid-template-columns: 1fr; gap: 14px; }
+  .cat-card { height: 260px; }
+  .categories { padding: 40px 4%; }
+
+  /* Collections hero */
+  .page-hero h1 { font-size: clamp(30px, 8vw, 50px); }
+  .page-hero p { font-size: 13px; padding: 0 4px; }
+
+  /* Modal */
+  #shopModal > div { padding: 24px 18px !important; }
+
+  /* Footer */
+  .mini-footer { padding: 20px 4%; }
+}
+
+/* ── 400px: small phone ── */
+@media (max-width: 400px) {
+  .logo-main { font-size: 18px; letter-spacing: 2px; }
+  .logo-sub { font-size: 8px; letter-spacing: 3px; }
+
+  .hero-text h1 { font-size: 26px; }
+  .hstat .num { font-size: 18px; }
+  .hero-stats { gap: 14px; }
+
+  .pcard-img { height: 190px; }
+  .filter-btn { padding: 6px 12px; font-size: 10px; }
+
+  .cat-card { height: 230px; }
+  .cat-info h2 { font-size: 22px; }
+  .cat-info p { font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo"><span class="logo-main">Aurelia</span><span class="logo-sub">Jewels</span></div>
+  <ul class="nav-list">
+    <li><a href="accessory.html">Home</a></li>
+    <li><a href="collections.html" class="active">Collections</a></li>
+    <li><a href="#">Gifting</a></li>
+    <li><a href="#">About Us</a></li>
+    <li><a href="login.html">Login</a></li>
+  </ul>
+</nav>
+<nav class="mobile-nav" id="mobileNav">
+  <a href="accessory.html">Home</a>
+  <a href="collections.html" class="active">Collections</a>
+  <a href="gifting.html">Gifting</a>
+  <a href="about.html">About Us</a>
+  <a href="cart.html">Cart</a>
+</nav>
+
+<div class="breadcrumb">
+  <a href="accessory.html">Home</a> &nbsp;/&nbsp;
+  <a href="collections.html">Collections</a> &nbsp;/&nbsp;
+  <span>Earrings</span>
+</div>
+
+<div class="page-hero">
+  <div class="hero-inner">
+    <div class="hero-text fade-in">
+      <div class="eyebrow">Earrings</div>
+      <h1>Earring Collection</h1>
+      <p>Explore our curated selection of exquisite earrings — each piece crafted with precision, passion and the finest materials.</p>
+      <div class="hero-stats">
+        <div class="hstat"><div class="num">48+</div><div class="lbl">Designs</div></div>
+        <div class="hstat"><div class="num">22K+</div><div class="lbl">Sold</div></div>
+        <div class="hstat"><div class="num">4.9★</div><div class="lbl">Rating</div></div>
+      </div>
+    </div>
+    <div class="hero-emoji"></div>
+  </div>
+</div>
+
+<div class="filters fade-in">
+  <button class="filter-btn active" onclick="setFilter(this,'all')">All</button>
+  <button class="filter-btn" onclick="setFilter(this,'gold')">Gold</button>
+  <button class="filter-btn" onclick="setFilter(this,'diamond')">Diamond</button>
+  <button class="filter-btn" onclick="setFilter(this,'platinum')">Platinum</button>
+  <button class="filter-btn" onclick="setFilter(this,'under5k')">Under ₹5,000</button>
+  <button class="filter-btn" onclick="setFilter(this,'under25k')">Under ₹25,000</button>
+</div>
+
+<section class="products-section">
+  <div class="products-grid" id="productsGrid">
+    <div class="pcard fade-in" data-tag="gold under25k">
+      <div class="pcard-img"><img src="earring.jpg" alt="Classic Earrings I"></div>
+      <div class="pcard-body">
+        <div class="pcard-tag">Gold</div>
+        <div class="pcard-name">Classic Earrings I</div>
+        <div class="pcard-price">₹12,500</div>
+        <div class="pcard-actions">
+          <button class="shop-btn" onclick="shopNow('Classic Earrings I','₹12,500','earring.jpg')">Shop Now</button>
+          <button class="add-cart-btn" onclick="addToCart('Classic Earrings I','₹12,500',12500,'earring.jpg')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard fade-in" data-tag="diamond">
+      <div class="pcard-img"><img src="earring5.jpg" alt="Diamond Earrings II"></div>
+      <div class="pcard-body">
+        <div class="pcard-tag">Diamond</div>
+        <div class="pcard-name">Diamond Earrings II</div>
+        <div class="pcard-price">₹58,000</div>
+        <div class="pcard-actions">
+          <button class="shop-btn" onclick="shopNow('Diamond Earrings II','₹58,000','diamond.jpg')">Shop Now</button>
+          <button class="add-cart-btn" onclick="addToCart('Diamond Earrings II','₹58,000',58000,'diamond.jpg')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard fade-in" data-tag="gold">
+      <div class="pcard-img"><img src="earring1.jpg" alt="Royal Earrings III"></div>
+      <div class="pcard-body">
+        <div class="pcard-tag">Gold</div>
+        <div class="pcard-name">Royal Earrings III</div>
+        <div class="pcard-price">₹34,000</div>
+        <div class="pcard-actions">
+          <button class="shop-btn" onclick="shopNow('Royal Earrings III','₹34,000','ring.jpg')">Shop Now</button>
+          <button class="add-cart-btn" onclick="addToCart('Royal Earrings III','₹34,000',34000,'ring.jpg')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard fade-in" data-tag="platinum under5k">
+      <div class="pcard-img"><img src="earring6.jpg" alt="Platinum Earrings IV"></div>
+      <div class="pcard-body">
+        <div class="pcard-tag">Platinum</div>
+        <div class="pcard-name">Platinum Earrings IV</div>
+        <div class="pcard-price">₹4,200</div>
+        <div class="pcard-actions">
+          <button class="shop-btn" onclick="shopNow('Platinum Earrings IV','₹4,200','bracelet.jpg')">Shop Now</button>
+          <button class="add-cart-btn" onclick="addToCart('Platinum Earrings IV','₹4,200',4200,'bracelet.jpg')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard fade-in" data-tag="gold under5k">
+      <div class="pcard-img"><img src="earring2.jpg" alt="Elegant Earrings V"></div>
+      <div class="pcard-body">
+        <div class="pcard-tag">Gold</div>
+        <div class="pcard-name">Elegant Earrings V</div>
+        <div class="pcard-price">₹3,800</div>
+        <div class="pcard-actions">
+          <button class="shop-btn" onclick="shopNow('Elegant Earrings V','₹3,800','earring.jpg')">Shop Now</button>
+          <button class="add-cart-btn" onclick="addToCart('Elegant Earrings V','₹3,800',3800,'earring.jpg')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard fade-in" data-tag="diamond under25k">
+      <div class="pcard-img"><img src="earring4.jpg" alt="Heritage Earrings VI"></div>
+      <div class="pcard-body">
+        <div class="pcard-tag">Diamond</div>
+        <div class="pcard-name">Heritage Earrings VI</div>
+        <div class="pcard-price">₹19,500</div>
+        <div class="pcard-actions">
+          <button class="shop-btn" onclick="shopNow('Heritage Earrings VI','₹19,500','diamond.jpg')">Shop Now</button>
+          <button class="add-cart-btn" onclick="addToCart('Heritage Earrings VI','₹19,500',19500,'diamond.jpg')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard fade-in" data-tag="gold under25k">
+      <div class="pcard-img"><img src="earring3.jpg" alt="Aurelia Earrings VII"></div>
+      <div class="pcard-body">
+        <div class="pcard-tag">Gold</div>
+        <div class="pcard-name">Aurelia Earrings VII</div>
+        <div class="pcard-price">₹8,900</div>
+        <div class="pcard-actions">
+          <button class="shop-btn" onclick="shopNow('Aurelia Earrings VII','₹8,900','ring.jpg')">Shop Now</button>
+          <button class="add-cart-btn" onclick="addToCart('Aurelia Earrings VII','₹8,900',8900,'ring.jpg')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard fade-in" data-tag="platinum under5k">
+      <div class="pcard-img"><img src="earring7.jpg" alt="Luxe Earrings VIII"></div>
+      <div class="pcard-body">
+        <div class="pcard-tag">Platinum</div>
+        <div class="pcard-name">Luxe Earrings VIII</div>
+        <div class="pcard-price">₹2,400</div>
+        <div class="pcard-actions">
+          <button class="shop-btn" onclick="shopNow('Luxe Earrings VIII','₹2,400','bracelet.jpg')">Shop Now</button>
+          <button class="add-cart-btn" onclick="addToCart('Luxe Earrings VIII','₹2,400',2400,'bracelet.jpg')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+      </div>
+    </div></div>
+</section>
+
+<div class="mini-footer">
+  <p>&copy; 2025 Aurelia Jewels. All rights reserved.</p>
+  <a href="collections.html" class="back-link">← All Collections</a>
+</div>
+
+<div id="shopModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:4000;align-items:center;justify-content:center;backdrop-filter:blur(10px)">
+  <div style="background:#1a1a1a;border:1px solid rgba(212,175,55,0.3);border-radius:24px;padding:40px;max-width:460px;width:90%;position:relative">
+    <button onclick="closeModal()" style="position:absolute;top:16px;right:16px;background:none;border:1px solid rgba(212,175,55,0.3);color:#f0e8d0;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
+    <img id="mImg" src="" alt="" style="width:100%;height:200px;object-fit:cover;border-radius:14px;margin-bottom:18px">
+    <h2 id="mName" style="font-family:'Playfair Display',serif;color:#f0e8d0;font-size:22px;margin-bottom:6px"></h2>
+    <div id="mPrice" style="color:#d4af37;font-size:20px;font-weight:600;margin-bottom:18px"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px">
+      <span style="color:#8a7d65;font-size:13px">Qty:</span>
+      <button onclick="chQty(-1)" style="width:28px;height:28px;border:1px solid rgba(212,175,55,0.3);border-radius:50%;background:none;color:#f0e8d0;cursor:pointer">−</button>
+      <span id="mQty" style="min-width:24px;text-align:center">1</span>
+      <button onclick="chQty(1)" style="width:28px;height:28px;border:1px solid rgba(212,175,55,0.3);border-radius:50%;background:none;color:#f0e8d0;cursor:pointer">+</button>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button onclick="addModal()" style="flex:1;padding:13px;border:none;border-radius:50px;background:linear-gradient(135deg,#d4af37,#f7e7a9);color:#1a0f00;font-weight:700;cursor:pointer">Add to Cart</button>
+      <button onclick="buyNow()" style="flex:1;padding:13px;border:1px solid rgba(212,175,55,0.35);border-radius:50px;background:none;color:#d4af37;cursor:pointer">Buy Now</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var mData={};var mQty=1;
+
+/* ── CART HELPERS (localStorage) ── */
+function loadCart(){return JSON.parse(localStorage.getItem("aurelia_cart")||"[]");}
+function saveCart(cart){localStorage.setItem("aurelia_cart",JSON.stringify(cart));}
+
+function updateNavBadge(){
+  var cart=loadCart();
+  var count=cart.reduce(function(s,i){return s+i.qty;},0);
+  var badge=document.getElementById("navCartBadge");
+  if(badge){badge.textContent=count;badge.style.display=count>0?"inline-block":"none";}
+}
+
+function showToast(m){
+  var t=document.getElementById("toast");
+  t.textContent=m;t.classList.add("show");
+  setTimeout(function(){t.classList.remove("show");},2800);
+}
+
+function addToCart(name,price,val,img,qty){
+  qty=qty||1;
+  var cart=loadCart();
+  var existing=cart.find(function(i){return i.name===name;});
+  if(existing){existing.qty+=qty;}
+  else{cart.push({name:name,price:val,num:val,qty:qty,img:img});}
+  saveCart(cart);
+  updateNavBadge();
+  showToast("✦ Added to cart: "+name);
+}
+
+function shopNow(name,price,img){
+  mData={name:name,price:price,img:img,val:parseInt(price.replace(/[^0-9]/g,""))};
+  mQty=1;
+  document.getElementById("mImg").src=img;
+  document.getElementById("mName").textContent=name;
+  document.getElementById("mPrice").textContent=price;
+  document.getElementById("mQty").textContent=1;
+  document.getElementById("shopModal").style.display="flex";
+}
+
+function closeModal(){document.getElementById("shopModal").style.display="none";}
+
+function chQty(d){
+  mQty=Math.max(1,mQty+d);
+  document.getElementById("mQty").textContent=mQty;
+}
+
+function addModal(){
+  addToCart(mData.name,mData.price,mData.val,mData.img,mQty);
+  closeModal();
+}
+
+function buyNow(){
+  addToCart(mData.name,mData.price,mData.val,mData.img,mQty);
+  closeModal();
+  window.location.href="cart.html";
+}
+
+function setFilter(btn,tag){
+  document.querySelectorAll(".filter-btn").forEach(function(b){b.classList.remove("active");});
+  btn.classList.add("active");
+  document.querySelectorAll(".pcard").forEach(function(card){
+    var tags=card.dataset.tag||"";
+    card.style.display=(tag==="all"||tags.includes(tag))?"flex":"none";
+  });
+}
+
+updateNavBadge();
+var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add("show");});},{threshold:0.1});
+document.querySelectorAll(".fade-in").forEach(function(el){obs.observe(el);});
+
+</script>
+
+<script>
+function toggleMobileNav(){
+  var nav = document.getElementById('mobileNav');
+  var btn = document.getElementById('hamburger');
+  if(!nav) return;
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+// Close on outside click
+document.addEventListener('click', function(e){
+  var nav = document.getElementById('mobileNav');
+  var btn = document.getElementById('hamburger');
+  if(nav && btn && !nav.contains(e.target) && !btn.contains(e.target)){
+    nav.classList.remove('open');
+    btn.classList.remove('open');
+  }
+});
+// Close on link click
+document.querySelectorAll('#mobileNav a').forEach(function(a){
+  a.addEventListener('click', function(){
+    document.getElementById('mobileNav').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+  });
+});
+</script>
+
+</body>
+</html>

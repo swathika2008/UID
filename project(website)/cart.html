@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Your Cart — Aurelia Jewels</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="accessory.css">
+  <style>
+    .cart-page{min-height:100vh;padding:100px 5% 60px;background:var(--dark1)}
+    .cart-page-header{margin-bottom:40px}
+    .cart-page-header .section-label{display:block;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;opacity:0.7}
+    .cart-page-header h1{font-family:'Playfair Display',serif;font-size:38px;color:var(--text)}
+    .cart-layout{display:grid;grid-template-columns:1fr 360px;gap:36px;align-items:start}
+    .cart-items-box{background:var(--dark3);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+    .cart-items-header{padding:20px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+    .cart-items-header h3{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold)}
+    .cart-items-header button{background:none;border:1px solid rgba(212,175,55,0.2);color:var(--muted);font-size:11px;padding:5px 14px;border-radius:20px;cursor:pointer;transition:0.3s;letter-spacing:1px}
+    .cart-items-header button:hover{border-color:var(--gold);color:var(--gold)}
+    .cart-item-row{display:flex;align-items:center;gap:18px;padding:20px 28px;border-bottom:1px solid rgba(212,175,55,0.07);transition:background 0.2s}
+    .cart-item-row:last-child{border-bottom:none}
+    .cart-item-row:hover{background:rgba(212,175,55,0.03)}
+    .ci-img{width:80px;height:80px;border-radius:12px;object-fit:cover;border:1px solid var(--border);flex-shrink:0}
+    .ci-info{flex:1}
+    .ci-info h4{font-family:'Playfair Display',serif;font-size:16px;color:var(--text);margin-bottom:5px}
+    .ci-info .ci-price{color:var(--gold);font-weight:600;font-size:14px}
+    .ci-qty{display:flex;align-items:center;gap:10px;margin-top:12px}
+    .ci-qty button{width:28px;height:28px;border:1px solid var(--border);border-radius:50%;background:none;color:var(--text);cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:0.2s}
+    .ci-qty button:hover{border-color:var(--gold);color:var(--gold)}
+    .ci-qty span{font-size:14px;min-width:24px;text-align:center;color:var(--text)}
+    .ci-subtotal{font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);min-width:90px;text-align:right}
+    .ci-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;padding:5px;transition:color 0.2s;margin-left:8px}
+    .ci-remove:hover{color:#e55}
+
+    /* SUMMARY */
+    .cart-summary{background:var(--dark3);border:1px solid var(--border);border-radius:20px;padding:28px;position:sticky;top:90px}
+    .cart-summary h3{font-family:'Playfair Display',serif;font-size:20px;color:var(--gold);margin-bottom:22px}
+    .summary-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:12px}
+    .summary-row.discount{color:#6fca6f}
+    .summary-divider{height:1px;background:var(--border);margin:16px 0}
+    .summary-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+    .summary-total span{font-size:14px;color:var(--muted)}
+    .summary-total strong{font-family:'Playfair Display',serif;font-size:24px;color:var(--gold)}
+    .coupon-wrap{display:flex;gap:0;margin-bottom:18px}
+    .coupon-wrap input{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-right:none;border-radius:10px 0 0 10px;padding:10px 14px;color:var(--text);font-size:12px;outline:none;transition:border-color 0.3s}
+    .coupon-wrap input:focus{border-color:var(--gold)}
+    .coupon-wrap input::placeholder{color:rgba(240,232,208,0.3)}
+    .coupon-wrap button{padding:10px 16px;background:linear-gradient(135deg,#d4af37,#f7e7a9);border:none;border-radius:0 10px 10px 0;color:#1a0f00;font-weight:700;font-size:11px;cursor:pointer;white-space:nowrap;letter-spacing:1px;transition:0.3s}
+    .coupon-wrap button:hover{box-shadow:0 4px 16px rgba(212,175,55,0.3)}
+    .checkout-btn{width:100%;padding:15px;border:none;border-radius:50px;background:linear-gradient(110deg,#b8922a,#d4af37,#f7e7a9,#d4af37);background-size:250%;color:#1a0f00;font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;letter-spacing:2px;cursor:pointer;transition:0.5s}
+    .checkout-btn:hover{background-position:right;box-shadow:0 8px 36px rgba(212,175,55,0.5)}
+    .secure-badge{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;font-size:11px;color:var(--muted);letter-spacing:1px}
+    .secure-badge svg{opacity:0.5}
+
+    /* EMPTY STATE */
+    .cart-empty-state{text-align:center;padding:80px 40px;display:flex;flex-direction:column;align-items:center;gap:16px}
+    .cart-empty-state svg{opacity:0.3}
+    .cart-empty-state h3{font-family:'Playfair Display',serif;font-size:24px;color:var(--text)}
+    .cart-empty-state p{color:var(--muted);font-size:14px}
+    .cart-empty-state a{display:inline-block;margin-top:8px;padding:12px 32px;background:linear-gradient(135deg,#d4af37,#f7e7a9);color:#1a0f00;text-decoration:none;border-radius:50px;font-weight:600;font-size:14px;letter-spacing:1px;transition:0.3s}
+    .cart-empty-state a:hover{box-shadow:0 8px 30px rgba(212,175,55,0.4);transform:translateY(-2px)}
+
+    @media(max-width:900px){.cart-layout{grid-template-columns:1fr}.cart-summary{position:static}}
+
+    /* ── CELEBRATION OVERLAY ── */
+    #celebrationOverlay{
+      position:fixed;inset:0;z-index:9000;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      background:rgba(5,4,2,0.92);backdrop-filter:blur(12px);
+      opacity:0;pointer-events:none;
+      transition:opacity 0.5s ease;
+    }
+    #celebrationOverlay.show{opacity:1;pointer-events:all}
+
+    .celebration-card{
+      background:linear-gradient(145deg,#161410,#1f1a0d);
+      border:1px solid rgba(212,175,55,0.4);
+      border-radius:28px;padding:54px 52px;text-align:center;
+      position:relative;overflow:hidden;
+      box-shadow:0 0 80px rgba(212,175,55,0.15);
+      animation:cardPop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+      max-width:480px;width:90%;
+    }
+    @keyframes cardPop{from{transform:scale(0.7) translateY(40px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+
+    /* shimmer line top */
+    .celebration-card::before{
+      content:'';position:absolute;top:0;left:10%;width:80%;height:1px;
+      background:linear-gradient(90deg,transparent,#d4af37,transparent);
+    }
+
+    .cel-icon{
+      font-size:64px;margin-bottom:20px;
+      animation:iconBounce 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.3s both;
+      display:block;
+    }
+    @keyframes iconBounce{from{transform:scale(0) rotate(-20deg)}to{transform:scale(1) rotate(0)}}
+
+    .cel-title{
+      font-family:'Playfair Display',serif;
+      font-size:32px;letter-spacing:2px;
+      background:linear-gradient(90deg,#d4af37,#f7e7a9,#d4af37);
+      background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      animation:shimmer 3s linear infinite,fadeUp 0.6s ease 0.4s both;
+      margin-bottom:10px;
+    }
+    .cel-sub{
+      font-size:13px;letter-spacing:3px;text-transform:uppercase;
+      color:rgba(212,175,55,0.6);margin-bottom:24px;
+      animation:fadeUp 0.6s ease 0.5s both;
+    }
+    .cel-msg{
+      font-size:14px;color:#a09070;line-height:1.8;margin-bottom:32px;
+      animation:fadeUp 0.6s ease 0.6s both;
+    }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+    .cel-order{
+      background:rgba(212,175,55,0.07);border:1px solid rgba(212,175,55,0.2);
+      border-radius:14px;padding:16px 24px;margin-bottom:28px;
+      animation:fadeUp 0.6s ease 0.7s both;
+    }
+    .cel-order-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#8a7d65;margin-bottom:6px}
+    .cel-order-num{font-family:'Playfair Display',serif;font-size:22px;color:#d4af37;letter-spacing:4px}
+
+    .cel-btn{
+      display:inline-block;padding:14px 40px;border:none;border-radius:50px;
+      background:linear-gradient(110deg,#b8922a,#d4af37,#f7e7a9,#d4af37);background-size:250%;
+      color:#1a0f00;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;
+      letter-spacing:2px;cursor:pointer;transition:0.5s;
+      animation:fadeUp 0.6s ease 0.8s both;
+    }
+    .cel-btn:hover{background-position:right;box-shadow:0 8px 36px rgba(212,175,55,0.5);transform:translateY(-2px)}
+
+    /* ── CANVAS CONFETTI ── */
+    #confettiCanvas{
+      position:fixed;inset:0;z-index:8999;pointer-events:none;
+    }
+
+    /* ── FLOATING GEMS ── */
+    .gem{
+      position:fixed;z-index:9001;pointer-events:none;font-size:22px;
+      animation:gemFloat var(--dur,2.5s) ease-out var(--delay,0s) forwards;
+      opacity:0;
+    }
+    @keyframes gemFloat{
+      0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}
+      100%{opacity:0;transform:translate(var(--tx,0px),var(--ty,-300px)) rotate(var(--rot,360deg)) scale(0.3)}
+    }
+
+    /* pulse ring behind card */
+    .cel-ring{
+      position:absolute;border-radius:50%;border:1px solid rgba(212,175,55,0.2);
+      animation:ringPulse 2s ease-out infinite;pointer-events:none;
+    }
+    @keyframes ringPulse{0%{transform:scale(0.8);opacity:0.6}100%{transform:scale(2.5);opacity:0}}
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">
+    <span class="logo-main">Aurelia</span>
+    <span class="logo-sub">Jewels</span>
+  </div>
+  <ul class="nav-list">
+    <li><a href="accessory.html">Home</a></li>
+    <li><a href="collections.html">Collections</a></li>
+    <li><a href="gifting.html">Gifting</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="cart.html" class="active">Cart</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="cart-btn" title="Cart">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+      <span class="cart-count visible" id="cartCount">0</span>
+    </button>
+    <button class="nav-user-btn logged-in" id="navUserBtn" onclick="handleLogout()">Logout</button>
+  </div>
+</nav>
+
+<div class="cart-page">
+  <div class="cart-page-header">
+    <span class="section-label">Shopping</span>
+    <h1>Your Cart</h1>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div id="emptyState" style="display:none">
+    <div class="cart-empty-state">
+      <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+      <h3>Your cart is empty</h3>
+      <p>Discover our exquisite collections and add pieces you love.</p>
+      <a href="accessory.html">Continue Shopping</a>
+    </div>
+  </div>
+
+  <!-- CART LAYOUT -->
+  <div class="cart-layout" id="cartLayout">
+    <div class="cart-items-box">
+      <div class="cart-items-header">
+        <h3>Items (<span id="itemCount">0</span>)</h3>
+        <button onclick="clearCart()">Clear All</button>
+      </div>
+      <div id="cartItemsList"></div>
+    </div>
+
+    <div class="cart-summary">
+      <h3>Order Summary</h3>
+      <div class="summary-row"><span>Subtotal</span><span id="sumSubtotal">₹0</span></div>
+      <div class="summary-row discount" id="discountRow" style="display:none"><span>Discount (10%)</span><span id="sumDiscount">-₹0</span></div>
+      <div class="summary-row"><span>Shipping</span><span id="sumShipping">₹200</span></div>
+      <div class="summary-divider"></div>
+      <div class="summary-total">
+        <span>Total</span>
+        <strong id="sumTotal">₹0</strong>
+      </div>
+      <div class="coupon-wrap">
+        <input type="text" id="couponInput" placeholder="Enter coupon code">
+        <button onclick="applyCoupon()">Apply</button>
+      </div>
+      <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+      <div class="secure-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Secure Checkout · SSL Encrypted
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFETTI CANVAS -->
+<canvas id="confettiCanvas"></canvas>
+
+<!-- CELEBRATION OVERLAY -->
+<div id="celebrationOverlay">
+  <div class="celebration-card" id="celebrationCard">
+    <div class="cel-ring" style="width:200px;height:200px;top:50%;left:50%;margin:-100px 0 0 -100px;animation-delay:0s"></div>
+    <div class="cel-ring" style="width:200px;height:200px;top:50%;left:50%;margin:-100px 0 0 -100px;animation-delay:0.6s"></div>
+    <span class="cel-icon">💎</span>
+    <h2 class="cel-title">Order Confirmed!</h2>
+    <p class="cel-sub">✦ Thank You for Shopping with Aurelia ✦</p>
+    <p class="cel-msg">Your exquisite jewellery is being carefully prepared and will be delivered to you wrapped in our signature luxury packaging.</p>
+    <div class="cel-order">
+      <div class="cel-order-label">Your Order Number</div>
+      <div class="cel-order-num" id="orderNum">#AUR-000000</div>
+    </div>
+    <button class="cel-btn" onclick="closeCelebration()">Continue Shopping</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // Auth guard
+  const user = JSON.parse(localStorage.getItem('aurelia_user') || 'null');
+  if (!user) {
+    showToast('Please login to view your cart');
+    setTimeout(() => window.location.href = 'login.html', 1200);
+  }
+
+  document.getElementById('navUserBtn').textContent = 'Logout (' + (user ? user.name : '') + ')';
+
+  function handleLogout() {
+    localStorage.removeItem('aurelia_user');
+    localStorage.removeItem('aurelia_cart');
+    window.location.href = 'login.html';
+  }
+
+  let discountApplied = false;
+
+  function loadCart() { return JSON.parse(localStorage.getItem('aurelia_cart') || '[]'); }
+  function saveCart(cart) { localStorage.setItem('aurelia_cart', JSON.stringify(cart)); }
+
+  function renderCart() {
+    const cart = loadCart();
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+    document.getElementById('cartCount').textContent = count;
+    document.getElementById('itemCount').textContent = count;
+
+    const list = document.getElementById('cartItemsList');
+    list.innerHTML = '';
+
+    if (cart.length === 0) {
+      document.getElementById('emptyState').style.display = 'block';
+      document.getElementById('cartLayout').style.display = 'none';
+      return;
+    }
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('cartLayout').style.display = 'grid';
+
+    cart.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'cart-item-row';
+      const subtotal = (item.num * item.qty).toLocaleString('en-IN');
+      row.innerHTML = `
+        <img class="ci-img" src="${item.img}" alt="${item.name}">
+        <div class="ci-info">
+          <h4>${item.name}</h4>
+          <div class="ci-price">₹${item.price}</div>
+          <div class="ci-qty">
+            <button onclick="changeQty('${item.name}',-1)">−</button>
+            <span>${item.qty}</span>
+            <button onclick="changeQty('${item.name}',1)">+</button>
+          </div>
+        </div>
+        <div class="ci-subtotal">₹${subtotal}</div>
+        <button class="ci-remove" onclick="removeItem('${item.name}')" title="Remove">×</button>
+      `;
+      list.appendChild(row);
+    });
+
+    updateSummary(cart);
+  }
+
+  function updateSummary(cart) {
+    const subtotal = cart.reduce((s, i) => s + i.num * i.qty, 0);
+    const shipping = subtotal > 5000 ? 0 : 200;
+    const discount = discountApplied ? Math.round(subtotal * 0.1) : 0;
+    const total = subtotal - discount + shipping;
+
+    document.getElementById('sumSubtotal').textContent = '₹' + subtotal.toLocaleString('en-IN');
+    document.getElementById('sumShipping').textContent = shipping === 0 ? 'Free' : '₹200';
+    document.getElementById('discountRow').style.display = discountApplied ? 'flex' : 'none';
+    document.getElementById('sumDiscount').textContent = '-₹' + discount.toLocaleString('en-IN');
+    document.getElementById('sumTotal').textContent = '₹' + total.toLocaleString('en-IN');
+  }
+
+  function changeQty(name, delta) {
+    let cart = loadCart();
+    const item = cart.find(i => i.name === name);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) cart = cart.filter(i => i.name !== name);
+    saveCart(cart);
+    renderCart();
+  }
+
+  function removeItem(name) {
+    let cart = loadCart().filter(i => i.name !== name);
+    saveCart(cart);
+    renderCart();
+    showToast('Item removed');
+  }
+
+  function clearCart() {
+    saveCart([]);
+    discountApplied = false;
+    renderCart();
+    showToast('Cart cleared');
+  }
+
+  function applyCoupon() {
+    const code = document.getElementById('couponInput').value.trim().toUpperCase();
+    if (code === 'AURELIA10') {
+      discountApplied = true;
+      renderCart();
+      showToast('✦ 10% discount applied!');
+    } else {
+      showToast('Invalid coupon code');
+    }
+  }
+
+  function checkout() {
+    const cart = loadCart();
+    if (cart.length === 0) { showToast('Your cart is empty'); return; }
+    launchCelebration();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  /* ── CELEBRATION ── */
+  function launchCelebration() {
+    // Generate order number
+    const orderNum = '#AUR-' + Math.floor(100000 + Math.random() * 900000);
+    document.getElementById('orderNum').textContent = orderNum;
+
+    // Show overlay
+    const overlay = document.getElementById('celebrationOverlay');
+    overlay.classList.add('show');
+
+    // Launch confetti
+    startConfetti();
+
+    // Launch floating gems
+    launchGems();
+
+    // Clear cart after celebration shown
+    setTimeout(() => { saveCart([]); renderCart(); }, 500);
+  }
+
+  function closeCelebration() {
+    document.getElementById('celebrationOverlay').classList.remove('show');
+    stopConfetti();
+    document.querySelectorAll('.gem').forEach(g => g.remove());
+  }
+
+  /* ── CONFETTI ENGINE ── */
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  let confettiParticles = [];
+  let confettiRunning = false;
+  let confettiRAF;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  const COLORS = ['#d4af37','#f7e7a9','#ffffff','#c5a059','#ffe066','#b8922a','#fff3b0','#ffd700'];
+  const SHAPES = ['rect','circle','diamond'];
+
+  function makeParticle() {
+    return {
+      x: Math.random() * canvas.width,
+      y: -20,
+      size: 6 + Math.random() * 10,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
+      speedY: 2 + Math.random() * 4,
+      speedX: (Math.random() - 0.5) * 3,
+      spin: (Math.random() - 0.5) * 0.2,
+      angle: Math.random() * Math.PI * 2,
+      opacity: 1,
+      wobble: Math.random() * Math.PI * 2,
+      wobbleSpeed: 0.05 + Math.random() * 0.08,
+    };
+  }
+
+  function drawParticle(p) {
+    ctx.save();
+    ctx.globalAlpha = p.opacity;
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.angle);
+    ctx.fillStyle = p.color;
+    if (p.shape === 'rect') {
+      ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+    } else if (p.shape === 'circle') {
+      ctx.beginPath();
+      ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+      ctx.fill();
+    } else { // diamond
+      ctx.beginPath();
+      ctx.moveTo(0, -p.size / 2);
+      ctx.lineTo(p.size / 2, 0);
+      ctx.lineTo(0, p.size / 2);
+      ctx.lineTo(-p.size / 2, 0);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function confettiLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Spawn bursts
+    if (confettiRunning) {
+      for (let i = 0; i < 6; i++) confettiParticles.push(makeParticle());
+    }
+    confettiParticles.forEach(p => {
+      p.wobble += p.wobbleSpeed;
+      p.x += p.speedX + Math.sin(p.wobble) * 1.5;
+      p.y += p.speedY;
+      p.angle += p.spin;
+      if (p.y > canvas.height * 0.7) p.opacity -= 0.02;
+      drawParticle(p);
+    });
+    confettiParticles = confettiParticles.filter(p => p.opacity > 0);
+    confettiRAF = requestAnimationFrame(confettiLoop);
+  }
+
+  function startConfetti() {
+    confettiRunning = true;
+    confettiParticles = [];
+    // Burst from center top
+    for (let i = 0; i < 120; i++) {
+      const p = makeParticle();
+      p.x = canvas.width / 2 + (Math.random() - 0.5) * 300;
+      p.speedY = 1 + Math.random() * 5;
+      p.speedX = (Math.random() - 0.5) * 8;
+      confettiParticles.push(p);
+    }
+    confettiLoop();
+    // Stop spawning new ones after 3s
+    setTimeout(() => { confettiRunning = false; }, 3000);
+  }
+
+  function stopConfetti() {
+    confettiRunning = false;
+    cancelAnimationFrame(confettiRAF);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    confettiParticles = [];
+  }
+
+  /* ── FLOATING GEMS ── */
+  const gemEmojis = ['💎','✨','⭐','🌟','💫','👑','💍','🏅'];
+
+  function launchGems() {
+    for (let i = 0; i < 18; i++) {
+      setTimeout(() => {
+        const gem = document.createElement('div');
+        gem.className = 'gem';
+        gem.textContent = gemEmojis[Math.floor(Math.random() * gemEmojis.length)];
+        const startX = 10 + Math.random() * 80; // vw %
+        const tx = (Math.random() - 0.5) * 200;
+        const ty = -(150 + Math.random() * 300);
+        const rot = (Math.random() - 0.5) * 720;
+        const dur = 1.8 + Math.random() * 1.5;
+        gem.style.cssText = `
+          left:${startX}vw;
+          bottom:20vh;
+          --tx:${tx}px;
+          --ty:${ty}px;
+          --rot:${rot}deg;
+          --dur:${dur}s;
+          --delay:${Math.random() * 0.8}s;
+          font-size:${18 + Math.random() * 20}px;
+        `;
+        document.body.appendChild(gem);
+        setTimeout(() => gem.remove(), (dur + 1) * 1000);
+      }, i * 120);
+    }
+  }
+
+  renderCart();
+</script>
+</body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Collections — Aurelia Jewels</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* RESET */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* VARIABLES */
+:root{
+  --gold:#d4af37;--gold-light:#f7e7a9;--gold-dim:#7a621a;
+  --dark1:#0d0d0d;--dark2:#111;
+  --border:rgba(212,175,55,.22);
+  --text:#f0e8d0;--muted:#8a7d65;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--dark1);
+  color:var(--text);
+}
+
+/* NAVBAR */
+.navbar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 36px;
+  position:fixed;top:0;width:100%;z-index:1000;
+  background:rgba(7,7,7,.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+
+.logo{display:flex;flex-direction:column;line-height:1}
+
+.logo-main{
+  font:700 22px 'Playfair Display',serif;
+  letter-spacing:3px;
+  background:linear-gradient(90deg,var(--gold),var(--gold-light),var(--gold));
+  background-size:200%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shimmer 4s linear infinite;
+}
+
+.logo-sub{
+  font-size:9px;letter-spacing:5px;
+  color:var(--gold-dim);
+  text-transform:uppercase;
+}
+
+@keyframes shimmer{
+  from{background-position:-100%}
+  to{background-position:200%}
+}
+
+/* NAV LINKS */
+.nav-list{display:flex;gap:26px;list-style:none}
+
+.nav-list a{
+  font-size:13px;
+  color:rgba(240,232,208,.75);
+  text-decoration:none;
+  position:relative;
+  transition:.3s;
+}
+
+.nav-list a::after{
+  content:'';position:absolute;
+  left:0;bottom:-4px;
+  width:0;height:1px;
+  background:var(--gold);
+  transition:.3s;
+}
+
+.nav-list a:hover,
+.nav-list a.active{color:var(--gold)}
+
+.nav-list a:hover::after,
+.nav-list a.active::after{width:100%}
+
+/* NAV RIGHT */
+.nav-right{display:flex;gap:10px}
+
+.nav-right a{
+  padding:8px 18px;
+  border-radius:20px;
+  border:1px solid var(--border);
+  color:var(--text);
+  font-size:13px;
+  text-decoration:none;
+  transition:.3s;
+}
+
+.nav-right a:hover{
+  border-color:var(--gold);
+  color:var(--gold);
+}
+
+/* HERO */
+.page-hero{
+  padding:140px 5% 80px;
+  text-align:center;
+  background:linear-gradient(180deg,#070707,var(--dark1));
+  position:relative;
+  overflow:hidden;
+}
+
+.page-hero::before{
+  content:'';position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(212,175,55,.07),transparent 70%);
+}
+
+.page-hero .eyebrow{
+  display:flex;justify-content:center;align-items:center;
+  gap:14px;
+  font-size:11px;
+  letter-spacing:6px;
+  color:var(--gold);
+  text-transform:uppercase;
+}
+
+.page-hero .eyebrow::before,
+.page-hero .eyebrow::after{
+  content:'';width:30px;height:1px;
+  background:var(--gold);
+}
+
+.page-hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(40px,6vw,70px);
+  margin:18px 0;
+}
+
+.page-hero p{
+  max-width:500px;
+  margin:auto;
+  color:var(--muted);
+  line-height:1.7;
+}
+
+/* CATEGORY GRID */
+.categories{padding:80px 5%}
+
+.cat-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:28px;
+  max-width:1100px;
+  margin:auto;
+}
+
+/* CARD */
+.cat-card{
+  position:relative;
+  height:380px;
+  border-radius:24px;
+  overflow:hidden;
+  border:1px solid rgba(212,175,55,.1);
+  transition:.5s;
+  text-decoration:none;
+}
+
+.cat-card:hover{
+  transform:translateY(-10px) scale(1.01);
+  box-shadow:0 30px 70px rgba(0,0,0,.6),
+             0 0 0 1px rgba(212,175,55,.4);
+  border-color:rgba(212,175,55,.4);
+}
+
+/* BACKGROUND */
+.cat-bg{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:160px;
+  transition:.6s;
+}
+
+.cat-card:hover .cat-bg{transform:scale(1.12)}
+
+
+.cat-rings .cat-bg { background-image: url('ring2.jpg'); 
+background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;}
+.cat-necklaces .cat-bg{ background-image: url('necklace5.jpg');
+ background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;}
+.cat-earrings .cat-bg{background-image:url('earring1.jpg');
+ background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;}
+.cat-bracelets .cat-bg{background-image:url('bracelet1.jpg');
+ background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+/* OVERLAY */
+.cat-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.85),transparent);
+}
+
+/* TEXT */
+.cat-info{
+  position:absolute;
+  bottom:0;width:100%;
+  padding:32px 30px;
+}
+
+.cat-label{
+  font-size:10px;
+  letter-spacing:4px;
+  color:var(--gold);
+  text-transform:uppercase;
+}
+
+.cat-info h2{
+  font-family:'Playfair Display',serif;
+  font-size:34px;
+  margin:10px 0;
+color:white;
+}
+
+.cat-info p{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:20px;
+}
+
+/* BUTTON */
+.cat-cta{
+
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:11px 24px;
+  border-radius:50px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-light));
+  border:none;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.3s;
+
+ color:black;
+}  
+
+
+.cat-card:hover .cat-cta svg{transform:translateX(4px)}
+
+/* GEM */
+.gem{
+  position:absolute;
+  top:24px;right:24px;
+  width:6px;height:6px;
+  background:var(--gold);
+  transform:rotate(45deg);
+  opacity:0;
+  transition:.4s;
+}
+
+.cat-card:hover .gem{opacity:.7}
+
+/* WIDE CARD */
+.cat-card.wide{
+  grid-column:1/-1;
+  height:280px;
+}
+
+.cat-card.wide .cat-bg{font-size:200px}
+
+/* FOOTER */
+.mini-footer{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:30px 5%;
+  background:#050505;
+  border-top:1px solid var(--border);
+}
+
+.mini-footer p{font-size:12px;color:var(--muted)}
+
+.back-home{
+  display:flex;align-items:center;gap:6px;
+  color:var(--gold);
+  font-size:13px;
+  text-decoration:none;
+}
+
+.back-home:hover{opacity:.7}
+
+/* ANIMATION */
+.fade-in{
+  opacity:0;
+  transform:translateY(24px);
+  transition:.7s;
+}
+
+.fade-in.show{
+  opacity:1;
+  transform:translateY(0);
+}
+</style>
+<style>
+/* ═══════════════════════════════════════════
+   HAMBURGER MENU
+═══════════════════════════════════════════ */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px; height: 36px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 6px;
+  transition: border-color 0.3s;
+  flex-shrink: 0;
+}
+.hamburger:hover { border-color: var(--gold); }
+.hamburger span {
+  display: block;
+  width: 100%; height: 1.5px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: 0.35s;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Mobile nav drawer */
+.mobile-nav {
+  display: block;
+  position: fixed;
+  top: 57px; left: 0; right: 0;
+  background: rgba(7,7,7,0.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  z-index: 999;
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s;
+}
+.mobile-nav.open {
+  max-height: 400px;
+  padding: 12px 0 20px;
+}
+.mobile-nav a {
+  display: block;
+  padding: 13px 28px;
+  font-size: 15px;
+  color: rgba(240,232,208,0.8);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(212,175,55,0.07);
+  transition: color 0.2s, background 0.2s;
+  letter-spacing: 0.5px;
+}
+.mobile-nav a:last-child { border-bottom: none; }
+.mobile-nav a:hover, .mobile-nav a.active { color: var(--gold); background: rgba(212,175,55,0.05); }
+
+/* ═══════════════════════════════════════════
+   GLOBAL RESPONSIVE — ALL PAGES
+═══════════════════════════════════════════ */
+
+/* ── 1200px: tighten navbar padding ── */
+@media (max-width: 1200px) {
+  .navbar { padding: 12px 24px; }
+  .nav-list { gap: 18px; }
+}
+
+/* ── 900px: tablet ── */
+@media (max-width: 900px) {
+  /* Navbar */
+  .nav-list { display: none; }
+  .hamburger { display: flex; }
+
+  /* Product pages hero */
+  .hero-inner { flex-direction: column; gap: 24px; text-align: center; }
+  .hero-text p { margin: 0 auto 20px; }
+  .hero-stats { justify-content: center; }
+  .eyebrow { justify-content: center; }
+  .eyebrow::before { display: none; }
+  .hero-emoji { font-size: 70px; }
+  .breadcrumb { padding-top: 76px; }
+
+  /* Products grid → 2 col */
+  .products-grid { grid-template-columns: repeat(2,1fr); gap: 16px; }
+  .pcard { height: auto; }
+  .pcard-img { height: 180px; }
+
+  /* Collections page */
+  .cat-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .cat-card { height: 300px; }
+  .cat-info h2 { font-size: 26px; }
+
+  /* Footer */
+  .mini-footer { flex-direction: column; gap: 10px; text-align: center; }
+  .back-home, .back-link { margin: 0 auto; }
+
+  /* Nav-right (collections page) */
+  .nav-right { display: none; }
+}
+
+/* ── 600px: large phone ── */
+@media (max-width: 600px) {
+  .navbar { padding: 10px 16px; }
+
+  /* Product pages hero */
+  .page-hero { padding: 16px 4% 36px; }
+  .hero-text h1 { font-size: clamp(28px, 7vw, 44px); }
+  .hero-text p { font-size: 13px; }
+  .hero-stats { gap: 20px; }
+  .hstat .num { font-size: 20px; }
+  .breadcrumb { padding: 74px 4% 0; font-size: 11px; gap: 4px; }
+
+  /* Filters */
+  .filters { padding: 0 4% 28px; gap: 8px; }
+  .filter-btn { padding: 7px 14px; font-size: 11px; }
+
+  /* Products → 1 col */
+  .products-grid { grid-template-columns: 1fr; gap: 14px; }
+  .products-section { padding: 0 4% 60px; }
+  .pcard { height: auto; }
+  .pcard-img { height: 220px; }
+
+  /* Collections cards → 1 col */
+  .cat-grid { grid-template-columns: 1fr; gap: 14px; }
+  .cat-card { height: 260px; }
+  .categories { padding: 40px 4%; }
+
+  /* Collections hero */
+  .page-hero h1 { font-size: clamp(30px, 8vw, 50px); }
+  .page-hero p { font-size: 13px; padding: 0 4px; }
+
+  /* Modal */
+  #shopModal > div { padding: 24px 18px !important; }
+
+  /* Footer */
+  .mini-footer { padding: 20px 4%; }
+}
+
+/* ── 400px: small phone ── */
+@media (max-width: 400px) {
+  .logo-main { font-size: 18px; letter-spacing: 2px; }
+  .logo-sub { font-size: 8px; letter-spacing: 3px; }
+
+  .hero-text h1 { font-size: 26px; }
+  .hstat .num { font-size: 18px; }
+  .hero-stats { gap: 14px; }
+
+  .pcard-img { height: 190px; }
+  .filter-btn { padding: 6px 12px; font-size: 10px; }
+
+  .cat-card { height: 230px; }
+  .cat-info h2 { font-size: 22px; }
+  .cat-info p { font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+
+<nav class="navbar">
+  <div class="logo">
+    <span class="logo-main">Aurelia</span>
+    <span class="logo-sub">Jewels</span>
+  </div>
+  <ul class="nav-list">
+    <li><a href="accessory.html">Home</a></li>
+    <li><a href="collections.html" class="active">Collections</a></li>
+    <li><a href="gifting.html">Gifting</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="cart.html">Cart</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="accessory.html">← Back to Home</a>
+  </div>
+</nav>
+<nav class="mobile-nav" id="mobileNav">
+  <a href="accessory.html">Home</a>
+  <a href="collections.html" class="active">Collections</a>
+  <a href="gifting.html">Gifting</a>
+  <a href="about.html">About Us</a>
+  <a href="cart.html">Cart</a>
+</nav>
+
+<div class="page-hero">
+<div class="cat-bg">
+  <video autoplay muted loop playsinline>
+    <source src="aurelia.mp4" type="video/mp4">
+  </video>
+</div>
+
+  <div class="eyebrow">Explore</div>
+  <h1>Our Collections</h1>
+  <p>Discover handcrafted jewellery across every category — from delicate rings to statement necklaces, each piece tells a story.</p>
+</div>
+
+
+<section class="categories">
+  <div class="cat-grid">
+
+    <a href="rings.html" class="cat-card cat-rings fade-in">
+      <div class="gem"></div>
+      <div class="cat-bg"></div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <div class="cat-label">Category</div>
+        <h2>Rings</h2>
+        <p>From solitaires to stackables — find the perfect ring for every occasion and every finger.</p>
+        <span class="cat-cta">Shop Rings <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a href="necklaces.html" class="cat-card cat-necklaces fade-in">
+      <div class="gem"></div>
+      <div class="cat-bg"></div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <div class="cat-label">Category</div>
+        <h2>Necklaces</h2>
+        <p>Drape yourself in luxury — from fine chains to bold statement pieces that command attention.</p>
+        <span class="cat-cta">Shop Necklaces <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a href="earrings.html" class="cat-card cat-earrings fade-in">
+      <div class="gem"></div>
+      <div class="cat-bg"></div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <div class="cat-label">Category</div>
+        <h2>Earrings</h2>
+        <p>Studs, hoops, drops and dangles — our earring collection frames every face beautifully.</p>
+        <span class="cat-cta">Shop Earrings <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+    <a href="bracelets.html" class="cat-card cat-bracelets fade-in">
+      <div class="gem"></div>
+      <div class="cat-bg"></div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info">
+        <div class="cat-label">Category</div>
+        <h2>Bracelets</h2>
+        <p>Delicate bangles to bold cuffs — every wrist deserves a little gold.</p>
+        <span class="cat-cta">Shop Bracelets <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<div class="mini-footer">
+  <p>&copy; 2025 Aurelia Jewels. All rights reserved.</p>
+  <a href="accessory.html" class="back-home">← Back to Home</a>
+</div>
+
+<script>
+const obs = new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('show')}),{threshold:0.1});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+</script>
+
+<script>
+function toggleMobileNav(){
+  var nav = document.getElementById('mobileNav');
+  var btn = document.getElementById('hamburger');
+  if(!nav) return;
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+// Close on outside click
+document.addEventListener('click', function(e){
+  var nav = document.getElementById('mobileNav');
+  var btn = document.getElementById('hamburger');
+  if(nav && btn && !nav.contains(e.target) && !btn.contains(e.target)){
+    nav.classList.remove('open');
+    btn.classList.remove('open');
+  }
+});
+// Close on link click
+document.querySelectorAll('#mobileNav a').forEach(function(a){
+  a.addEventListener('click', function(){
+    document.getElementById('mobileNav').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+  });
+});
+</script>
+
+</body>
+</html>

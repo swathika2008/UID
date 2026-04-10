@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Gifting — Aurelia Jewels</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="accessory.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    .gift-hero{min-height:55vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:130px 5% 80px;background:linear-gradient(180deg,#08060a,#111111);position:relative;overflow:hidden}
+    .gift-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(212,175,55,0.1) 0%,transparent 65%);pointer-events:none}
+    .gift-hero .section-label{display:block;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;opacity:0.7}
+    .gift-hero h1{font-family:'Playfair Display',serif;font-size:clamp(36px,6vw,68px);color:var(--text);letter-spacing:2px;line-height:1.15}
+    .gift-hero h1 em{color:var(--gold);font-style:italic}
+    .gift-hero p{max-width:520px;color:var(--muted);font-size:15px;line-height:1.9;margin-top:18px}
+
+    /* OCCASIONS */
+    .gift-occasions{padding:80px 5%;background:var(--dark1)}
+    .gift-occasions .section-label{display:block;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;opacity:0.7}
+    .gift-occasions h2{font-family:'Playfair Display',serif;font-size:34px;color:var(--text);margin-bottom:44px}
+    .occasions-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+    .occasion-card{background:var(--dark3);border:1px solid rgba(212,175,55,0.1);border-radius:18px;padding:32px 24px;text-align:center;cursor:pointer;transition:0.4s;text-decoration:none;display:block}
+    .occasion-card:hover{transform:translateY(-7px);border-color:rgba(212,175,55,0.35);box-shadow:0 20px 50px rgba(0,0,0,0.4),0 0 0 1px rgba(212,175,55,0.15)}
+    .occasion-icon{width:56px;height:56px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);margin:0 auto 18px}
+    .occasion-card h3{font-family:'Playfair Display',serif;font-size:17px;color:var(--text);margin-bottom:8px}
+    .occasion-card p{color:var(--muted);font-size:12px;line-height:1.7}
+
+    /* GIFT SETS */
+    .gift-sets{padding:80px 5%;background:var(--dark2);text-align:center}
+    .gift-sets .section-label{display:block;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;opacity:0.7}
+    .gift-sets h2{font-family:'Playfair Display',serif;font-size:34px;color:var(--text);margin-bottom:44px}
+    .sets-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+    .set-card{background:var(--dark3);border:1px solid rgba(212,175,55,0.12);border-radius:20px;overflow:hidden;transition:0.4s;text-align:left}
+    .set-card:hover{transform:translateY(-7px);border-color:rgba(212,175,55,0.3);box-shadow:0 20px 50px rgba(0,0,0,0.4)}
+    .set-img{height:220px;overflow:hidden;position:relative}
+    .set-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s}
+    .set-card:hover .set-img img{transform:scale(1.06)}
+    .set-badge{position:absolute;top:14px;right:14px;background:linear-gradient(135deg,#d4af37,#f7e7a9);color:#1a0f00;font-size:10px;font-weight:700;letter-spacing:1.5px;padding:5px 12px;border-radius:20px}
+    .set-content{padding:22px 22px 18px}
+    .set-content h3{font-family:'Playfair Display',serif;font-size:18px;color:var(--text);margin-bottom:6px}
+    .set-content .set-desc{color:var(--muted);font-size:12px;line-height:1.7;margin-bottom:14px}
+    .set-content .set-price{color:var(--gold);font-weight:600;font-size:16px;margin-bottom:14px}
+    .set-content .shop-btn{width:100%;padding:8px;font-size:12px}
+
+    /* SERVICES */
+    .gift-services{padding:80px 5%;background:var(--dark1)}
+    .gift-services .section-label{display:block;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;opacity:0.7}
+    .gift-services h2{font-family:'Playfair Display',serif;font-size:34px;color:var(--text);margin-bottom:44px;text-align:center}
+    .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .service-card{background:var(--dark3);border:1px solid rgba(212,175,55,0.1);border-radius:18px;padding:30px 24px;display:flex;flex-direction:column;gap:14px;transition:0.3s}
+    .service-card:hover{border-color:rgba(212,175,55,0.28);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+    .service-card .svc-icon{width:44px;height:44px;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold)}
+    .service-card h3{font-family:'Playfair Display',serif;font-size:16px;color:var(--text)}
+    .service-card p{color:var(--muted);font-size:13px;line-height:1.8}
+
+    /* CTA */
+    .gift-cta{padding:80px 5%;background:linear-gradient(135deg,#0d0d0d,#141008);border-top:1px solid var(--border);text-align:center}
+    .gift-cta h2{font-family:'Playfair Display',serif;font-size:36px;color:var(--text);margin-bottom:14px}
+    .gift-cta h2 em{color:var(--gold);font-style:italic}
+    .gift-cta p{color:var(--muted);font-size:14px;margin-bottom:30px}
+    .gift-cta-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+    .gift-cta-btns a{padding:14px 40px;border-radius:50px;font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;letter-spacing:2px;text-decoration:none;transition:0.4s}
+    .gift-cta-btns .btn-primary{background:linear-gradient(110deg,#b8922a,#d4af37,#f7e7a9,#d4af37);background-size:250%;color:#1a0f00}
+    .gift-cta-btns .btn-primary:hover{background-position:right;box-shadow:0 8px 36px rgba(212,175,55,0.5);transform:translateY(-2px)}
+    .gift-cta-btns .btn-outline{border:1px solid rgba(212,175,55,0.4);color:var(--gold)}
+    .gift-cta-btns .btn-outline:hover{background:rgba(212,175,55,0.08);border-color:var(--gold);transform:translateY(-2px)}
+
+    @media(max-width:900px){.occasions-grid{grid-template-columns:repeat(2,1fr)}.sets-grid,.services-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:540px){.occasions-grid,.sets-grid,.services-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<div class="offer-banner">
+  <div class="offer-track">
+    <span>✦ Exclusive Offer — 10% Off on ALL Products ✦</span>
+    <span class="dot">|</span>
+    <span>✦ Use Code: AURELIA10 at Checkout ✦</span>
+    <span class="dot">|</span>
+    <span>✦ Free Shipping on Orders Above ₹5,000 ✦</span>
+    <span class="dot">|</span>
+    <span>✦ Exclusive Offer — 10% Off on ALL Products ✦</span>
+    <span class="dot">|</span>
+    <span>✦ Use Code: AURELIA10 at Checkout ✦</span>
+    <span class="dot">|</span>
+    <span>✦ Free Shipping on Orders Above ₹5,000 ✦</span>
+    <span class="dot">|</span>
+  </div>
+</div>
+
+<nav class="navbar">
+  <div class="logo">
+    <span class="logo-main">Aurelia</span>
+    <span class="logo-sub">Jewels</span>
+  </div>
+  <ul class="nav-list">
+    <li><a href="accessory.html">Home</a></li>
+    <li><a href="collections.html">Collections</a></li>
+    <li><a href="gifting.html" class="active">Gifting</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="cart.html">Cart</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-user-btn" id="navUserBtn" onclick="handleNavUser()">Login</button>
+  </div>
+</nav>
+
+<section class="gift-hero fade-in">
+  <span class="section-label">Gift with Grace</span>
+  <h1>The Art of <em>Gifting</em><br>Jewellery</h1>
+  <p>There are moments in life that deserve something truly extraordinary. Let Aurelia help you express your love, gratitude, and celebration through the gift of fine jewellery.</p>
+</section>
+
+<section class="gift-occasions fade-in">
+  <span class="section-label">Shop by Occasion</span>
+  <h2>Every Moment, Made Memorable</h2>
+  <div class="occasions-grid">
+    <a href="collections.html" class="occasion-card">
+      <div class="occasion-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <h3>Anniversaries</h3>
+      <p>Celebrate your journey together with a piece as enduring as your love.</p>
+    </a>
+    <a href="collections.html" class="occasion-card">
+      <div class="occasion-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <h3>Birthdays</h3>
+      <p>Mark another year of their remarkable life with a timeless Aurelia piece.</p>
+    </a>
+    <a href="collections.html" class="occasion-card">
+      <div class="occasion-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      </div>
+      <h3>Weddings</h3>
+      <p>From bridal sets to bridesmaids' gifts — make every moment of the occasion shine.</p>
+    </a>
+    <a href="collections.html" class="occasion-card">
+      <div class="occasion-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <h3>Milestones</h3>
+      <p>Graduations, promotions, new beginnings — honour achievement with elegance.</p>
+    </a>
+  </div>
+</section>
+
+<section class="gift-sets fade-in">
+  <span class="section-label">Curated Collections</span>
+  <h2>Gift Sets Made to Delight</h2>
+  <div class="sets-grid">
+    <div class="set-card">
+      <div class="set-img">
+        <img src="necklace.jpg" alt="Eternal Love Set">
+        <span class="set-badge">BESTSELLER</span>
+      </div>
+      <div class="set-content">
+        <h3>Eternal Love Set</h3>
+        <p class="set-desc">A hand-picked pairing of our Diamond Necklace and matching earrings — presented in our signature gold box.</p>
+        <p class="set-price">₹92,000</p>
+        <button class="shop-btn" onclick="addToCart()">Add to Cart</button>
+      </div>
+    </div>
+    <div class="set-card">
+      <div class="set-img">
+        <img src="bracelet.jpg" alt="Golden Moments Set">
+        <span class="set-badge">NEW</span>
+      </div>
+      <div class="set-content">
+        <h3>Golden Moments Set</h3>
+        <p class="set-desc">Our Luxury Bracelet and a Diamond Ring in a velvet presentation box, perfect for milestone occasions.</p>
+        <p class="set-price">₹34,000</p>
+        <button class="shop-btn" onclick="addToCart()">Add to Cart</button>
+      </div>
+    </div>
+    <div class="set-card">
+      <div class="set-img">
+        <img src="diamond.jpg" alt="Royal Heritage Set">
+      </div>
+      <div class="set-content">
+        <h3>Royal Heritage Set</h3>
+        <p class="set-desc">Regal Elegant Earrings paired with a Gold Bracelet, inspired by the grandeur of Indian royal jewellery traditions.</p>
+        <p class="set-price">₹54,000</p>
+        <button class="shop-btn" onclick="addToCart()">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gift-services fade-in">
+  <span class="section-label">The Aurelia Experience</span>
+  <h2>Our Gifting Services</h2>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="svc-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><polyline points="16 21 16 7 8 7 8 21"/></svg>
+      </div>
+      <h3>Luxury Gift Wrapping</h3>
+      <p>Every order arrives in our signature matte-black box, tied with a gold satin ribbon, and wrapped in premium tissue paper embossed with the Aurelia crest.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <h3>Personalised Messages</h3>
+      <p>Add a heartfelt handwritten note with your order. Our calligraphers will inscribe your message on premium parchment to accompany the jewellery.</p>
+    </div>
+    <div class="service-card">
+      <div class="svc-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      </div>
+      <h3>Same-Day Delivery</h3>
+      <p>Running out of time? We offer same-day delivery within select cities for orders placed before 12 PM. Because special moments should never wait.</p>
+    </div>
+  </div>
+</section>
+
+<section class="gift-cta fade-in">
+  <h2>Give the Gift of <em>Timeless</em> Beauty</h2>
+  <p>Let our gifting experts help you find the perfect piece for every person and occasion.</p>
+  <div class="gift-cta-btns">
+    <a href="collections.html" class="btn-primary">Shop Collections</a>
+    <a href="about.html" class="btn-outline">Contact Our Experts</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="logo-main">Aurelia</span>
+      <span class="logo-sub">Jewels</span>
+      <p>Crafting timeless jewellery since 2010.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul><li><a href="collections.html">All Collections</a></li><li><a href="gifting.html">Gifting</a></li></ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul><li><a href="about.html">About Us</a></li><li><a href="#">Careers</a></li></ul>
+    </div>
+    <div class="footer-col footer-newsletter">
+      <h4>Newsletter</h4>
+      <p style="font-size:12px;color:var(--muted)">Get exclusive offers to your inbox.</p>
+      <div class="newsletter-wrap"><input type="email" placeholder="your@email.com"><button>Join</button></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Aurelia Jewels. All rights reserved.</p>
+    <ul class="footer-bottom-links"><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms</a></li></ul>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function isLoggedIn(){return !!localStorage.getItem('aurelia_user')}
+function getUser(){return JSON.parse(localStorage.getItem('aurelia_user')||'null')}
+function handleNavUser(){
+  if(isLoggedIn()){localStorage.removeItem('aurelia_user');localStorage.removeItem('aurelia_cart');location.reload();}
+  else window.location.href='login.html';
+}
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+function addToCart(){
+  if(!isLoggedIn()){showToast('Please login to add items to cart');setTimeout(()=>window.location.href='login.html',1200);return;}
+  showToast('✦ Gift set added to cart!');
+}
+const btn=document.getElementById('navUserBtn');
+if(isLoggedIn()){const u=getUser();btn.textContent='Logout ('+u.name+')';btn.classList.add('logged-in');}
+const obs=new IntersectionObserver(e=>e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('show')}),{threshold:0.1});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

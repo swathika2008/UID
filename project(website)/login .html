@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login — Aurelia Jewels</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --gold: #d4af37;
+            --gold-light: #f7e7a9;
+            --gold-dim: #a8872a;
+            --black: #0a0a0a;
+            --dark: #111111;
+            --card: #161616;
+            --border: rgba(212,175,55,0.25);
+            --text: #f0e8d0;
+            --muted: #8a7d65;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(212,175,55,0.06) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(212,175,55,0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatOrb 10s ease-in-out infinite alternate;
+        }
+        .orb-1 { width: 400px; height: 400px; background: var(--gold); top: -100px; right: -100px; }
+        .orb-2 { width: 300px; height: 300px; background: var(--gold-light); bottom: -80px; left: -80px; animation-delay: -4s; }
+
+        @keyframes floatOrb {
+            from { transform: translate(0, 0); }
+            to   { transform: translate(30px, 20px); }
+        }
+
+        /* Decorative corner lines */
+        .corner {
+            position: fixed;
+            width: 120px;
+            height: 120px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .corner-tl { top: 24px; left: 24px; border-top: 1px solid var(--gold); border-left: 1px solid var(--gold); opacity: 0.4; }
+        .corner-br { bottom: 24px; right: 24px; border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold); opacity: 0.4; }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 30px;
+            width: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(212,175,55,0.15);
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .logo-main {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #d4af37, #f7e7a9, #d4af37);
+            background-size: 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s infinite linear;
+        }
+
+        .logo-sub {
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: gold;
+        }
+
+        @keyframes shine {
+            0% { background-position: -100%; }
+            100% { background-position: 100%; }
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-list li a {
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-list li a::after {
+            content: '';
+            width: 0%;
+            height: 2px;
+            background: gold;
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            transition: 0.3s;
+        }
+
+        .nav-list li a:hover::after { width: 100%; }
+        .nav-list li a.active { color: var(--gold); }
+
+        /* MAIN LOGIN CARD */
+        .login-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 440px;
+            padding: 20px;
+            animation: cardReveal 0.9s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        @keyframes cardReveal {
+            from { opacity: 0; transform: translateY(40px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .login-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 52px 44px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle inner glow top */
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .login-brand {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .login-brand .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, #d4af37, #f7e7a9, #d4af37);
+            background-size: 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s infinite linear;
+            display: block;
+        }
+
+        .login-brand .brand-sub {
+            display: block;
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: var(--gold-dim);
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        .divider-line {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .divider-line span {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+        }
+
+        .divider-line em {
+            font-style: normal;
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .field-group {
+            margin-bottom: 20px;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .field-group input {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(212,175,55,0.2);
+            border-radius: 12px;
+            padding: 14px 18px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+        }
+
+        .field-group input::placeholder { color: rgba(240,232,208,0.25); }
+
+        .field-group input:focus {
+            border-color: var(--gold);
+            background: rgba(212,175,55,0.05);
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+        }
+
+        .field-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            font-size: 13px;
+        }
+
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            cursor: pointer;
+        }
+
+        .remember input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--gold);
+            cursor: pointer;
+        }
+
+        .forgot {
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            transition: opacity 0.2s;
+        }
+
+        .forgot:hover { opacity: 0.7; }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #d4af37 0%, #f7e7a9 50%, #d4af37 100%);
+            background-size: 200%;
+            color: #1a1200;
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: background-position 0.5s, transform 0.2s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn:hover {
+            background-position: right;
+            box-shadow: 0 8px 30px rgba(212,175,55,0.4);
+            transform: translateY(-1px);
+        }
+
+        .login-btn:active { transform: translateY(0); }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 24px 0;
+        }
+
+        .separator span {
+            flex: 1;
+            height: 1px;
+            background: rgba(212,175,55,0.15);
+        }
+
+        .separator em {
+            font-style: normal;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .guest-btn {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid rgba(212,175,55,0.3);
+            border-radius: 50px;
+            background: transparent;
+            color: var(--gold);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .guest-btn:hover {
+            background: rgba(212,175,55,0.08);
+            border-color: var(--gold);
+        }
+
+        .signup-text {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .signup-text a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .signup-text a:hover { opacity: 0.7; }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(20,20,20,0.95);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            opacity: 0;
+            transition: opacity 0.4s, transform 0.4s;
+            z-index: 9999;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Decorative -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-br"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-main">Aurelia</span>
+            <span class="logo-sub">Jewels</span>
+        </div>
+        <ul class="nav-list">
+            <li><a href="accessory.html">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="login.html" class="active">Login</a></li>
+        </ul>
+    </nav>
+
+    <!-- Login Card -->
+    <div class="login-wrapper">
+        <div class="login-card">
+
+            <div class="login-brand">
+                <span class="brand-name">Aurelia</span>
+                <span class="brand-sub">Jewels — Member Access</span>
+            </div>
+
+            <div class="divider-line">
+                <span></span>
+                <em>Welcome Back</em>
+                <span></span>
+            </div>
+
+            <div class="field-group">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="you@example.com">
+            </div>
+
+            <div class="field-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="••••••••••">
+            </div>
+
+            <div class="field-options">
+                <label class="remember">
+                    <input type="checkbox"> Remember me
+                </label>
+                <a href="#" class="forgot">Forgot password?</a>
+            </div>
+
+            <button class="login-btn" onclick="handleLogin()">Sign In</button>
+
+            <div class="separator">
+                <span></span>
+                <em>or</em>
+                <span></span>
+            </div>
+
+            <button class="guest-btn" onclick="window.location.href='accessory.html'">Continue as Guest</button>
+
+            <p class="signup-text">
+                New to Aurelia? <a href="#">Create an account</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('email').value.trim();
+            const pass  = document.getElementById('password').value.trim();
+
+            if (!email || !pass) {
+                showToast('Please fill in all fields.');
+                return;
+            }
+            if (!email.includes('@')) {
+                showToast('Please enter a valid email.');
+                return;
+            }
+
+            showToast('✦ Welcome to Aurelia Jewels');
+            setTimeout(() => window.location.href = 'accessory.html', 1800);
+        }
+
+        document.getElementById('password').addEventListener('keydown', e => {
+            if (e.key === 'Enter') handleLogin();
+        });
+    </script>
+
+</body>
+</html>

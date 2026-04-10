@@ -1,0 +1,196 @@
+/* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ================= VARIABLES ================= */
+:root {
+  --gold: #d4af37;
+  --dark: #0d0d0d;
+  --text: #f0e8d0;
+  --card-bg: #1a1a1a;
+  --white: #ffffff;
+}
+
+/* ================= BODY ================= */
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--dark);
+  color: var(--text);
+  overflow-x: hidden; /* Prevents unwanted horizontal scrolls during animations */
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  min-height: 60px;
+  background-color: var(--white); /* Note: Ensure nav links are a dark color to be visible here */
+  position: sticky; /* Keeps it at the top while you scroll */
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  
+  /* Entrance Animation */
+  animation: slideDown 0.8s ease-out forwards;
+}
+
+/* ================= HERO ================= */
+.hero {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Subtle fade in for video */
+  animation: fadeIn 2s ease-in;
+}
+
+/* ================= PRODUCTS / GRID ================= */
+.accessories {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  padding: 40px 20px;
+}
+
+/* ================= CARD STYLES ================= */
+.card {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(212, 175, 55, 0.15);
+  border-color: var(--gold);
+}
+
+/* FIX: Specific fix for the Rings Card background */
+.rings-card {
+  background-image: url('your-ring-image.jpg'); /* Ensure path is correct */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  transition: transform 0.5s ease;
+}
+
+.card:hover img {
+  transform: scale(1.05); /* Subtle zoom on image hover */
+}
+
+/* ================= BUTTON ================= */
+button {
+  background: var(--gold);
+  color: var(--dark);
+  border: none;
+  padding: 10px 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+}
+
+button:hover {
+  background: var(--text);
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+}
+
+/* ================= KEYFRAMES ================= */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .accessories {
+    grid-template-columns: 1fr; /* Stack cards on mobile */
+  }
+  
+  .navbar {
+    padding: 10px 15px;
+  }
+}
+/* ================= TEXT ANIMATION ================= */
+
+.elegant-text {
+  font-size: 3rem;
+  text-transform: uppercase;
+  letter-spacing: 5px; /* Starting spacing */
+  color: var(--gold);
+  text-align: center;
+  
+  /* Applying the animations */
+  animation: 
+    revealText 5.5s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+    shimmer 4s infinite alternate;
+    
+  opacity: 0; /* Starts invisible */
+}
+
+/* 1. The Entrance: Text fades in and letters expand slightly */
+@keyframes revealText {
+  0% {
+    opacity: 0;
+    letter-spacing: 15px;
+    transform: translateY(20px);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    letter-spacing: 5px;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* 2. The Shimmer: A subtle gold-to-white light sweep */
+@keyframes shimmer {
+  0% {
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+  }
+  100% {
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 0 0 30px rgba(255, 255, 255, 0.3);
+    color: #fffaf0; /* Slightly lighter gold/cream */
+  }
+}

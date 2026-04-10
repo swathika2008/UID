@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Aurelia Jewels</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="accessory.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- OFFER BANNER -->
+<div class="offer-banner">
+  <div class="offer-track" id="offerTrack">
+    <span>✦ Exclusive Offer — 10% Off on ALL Products ✦</span>
+    <span class="dot">|</span>
+    <span>✦ Use Code: AURELIA10 at Checkout ✦</span>
+    <span class="dot">|</span>
+    <span>✦ Free Shipping on Orders Above ₹5,000 ✦</span>
+    <span class="dot">|</span>
+    <span>✦ Exclusive Offer — 10% Off on ALL Products ✦</span>
+    <span class="dot">|</span>
+    <span>✦ Use Code: AURELIA10 at Checkout ✦</span>
+    <span class="dot">|</span>
+    <span>✦ Free Shipping on Orders Above ₹5,000 ✦</span>
+    <span class="dot">|</span>
+  </div>
+</div>
+
+<nav class="navbar">
+  <div class="logo">
+    <span class="logo-main">Aurelia</span>
+    <span class="logo-sub">Jewels</span>
+  </div>
+  <ul class="nav-list">
+
+    <li><a href="accessory.html" class="active">Home</a></li>
+    <li><a href="collections.html">Collections</a></li>
+    <li><a href="gifting.html">Gifting</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="cart.html">Cart</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="search-container">
+      <div class="search-wrap">
+        <input type="search" id="search" placeholder="Search jewels..." autocomplete="off">
+        <button class="btn-search" onclick="doSearch()">Search</button>
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+    <button class="cart-btn" onclick="goToCart()" title="Your Cart">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <button class="nav-user-btn" id="navUserBtn" onclick="handleNavUser()">Login</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <video autoplay muted loop playsinline class="bg-video">
+    <source src="jewellery.mp4" type="video/mp4">
+  </video>
+  <div class="overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Est. 2010 — Handcrafted Luxury</p>
+    <h1>Timeless<br><em>Elegance</em></h1>
+    <a href="collections.html" class="hero-btn">Explore Collection</a>
+  </div>
+</div>
+
+<section class="jewel">
+  <span class="section-label">Curated for You</span>
+  <h2 class="section-title">New Collections</h2>
+  <div class="accessories">
+    <div class="card">
+      <div class="img-box"><img src="necklace.jpg" alt="Diamond Necklace"></div>
+      <div class="card-content">
+        <h3>Diamond Necklace</h3>
+        <p class="price">₹58,000</p>
+        <p class="card-rating"><span>★★★★★</span> 4.9 (128)</p>
+        <button class="shop-btn" onclick="addToCart('Diamond Necklace','58,000',58000,'necklace.jpg')">Add to Cart</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="img-box"><img src="earring.jpg" alt="Gold Earring"></div>
+      <div class="card-content">
+        <h3>Gold Earring</h3>
+        <p class="price">₹98,900</p>
+        <p class="card-rating"><span>★★★★★</span> 4.8 (94)</p>
+        <button class="shop-btn" onclick="addToCart('Gold Earring','98,900',98900,'earring.jpg')">Add to Cart</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="img-box"><img src="ring.jpg" alt="Diamond Ring"></div>
+      <div class="card-content">
+        <h3>Diamond Ring</h3>
+        <p class="price">₹5,500</p>
+        <p class="card-rating"><span>★★★★</span> 4.6 (76)</p>
+        <button class="shop-btn" onclick="addToCart('Diamond Ring','5,500',5500,'ring.jpg')">Add to Cart</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="img-box"><img src="bracelet.jpg" alt="Luxury Bracelet"></div>
+      <div class="card-content">
+        <h3>Luxury Bracelet</h3>
+        <p class="price">₹1,458</p>
+        <p class="card-rating"><span>★★★★</span> 4.5 (52)</p>
+        <button class="shop-btn" onclick="addToCart('Luxury Bracelet','1,458',1458,'bracelet.jpg')">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="royal">
+  <span class="section-label">Finest Craftsmanship</span>
+  <h2 class="section-title">Royally Crafted For You</h2>
+  <div class="royal-grid">
+    <div class="royal-card">
+      <img src="trad.jpg" alt="Royal Necklace">
+      <h3>Royal Necklace</h3>
+      <p>₹75,000</p>
+      <button class="shop-btn" onclick="addToCart('Royal Necklace','75,000',75000,'trad.jpg')">Add to Cart</button>
+    </div>
+    <div class="royal-card">
+      <img src="diamond.jpg" alt="Elegant Earrings">
+      <h3>Elegant Earrings</h3>
+      <p>₹32,000</p>
+      <button class="shop-btn" onclick="addToCart('Elegant Earrings','32,000',32000,'diamond.jpg')">Add to Cart</button>
+    </div>
+    <div class="royal-card">
+      <img src="gold.jpg" alt="Luxury Ring">
+      <h3>Luxury Ring</h3>
+      <p>₹15,000</p>
+      <button class="shop-btn" onclick="addToCart('Luxury Ring','15,000',15000,'gold.jpg')">Add to Cart</button>
+    </div>
+    <div class="royal-card">
+      <img src="tulip.jpg" alt="Gold Bracelet">
+      <h3>Gold Bracelet</h3>
+      <p>₹22,000</p>
+      <button class="shop-btn" onclick="addToCart('Gold Bracelet','22,000',22000,'tulip.jpg')">Add to Cart</button>
+    </div>
+  </div>
+</section>
+
+<section class="stats-container">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <span class="stat-number">5M+</span>
+      <h2 class="stat-title">Happy Customers</h2>
+      <p class="stat-desc">Our happy customers are a testament to our dedication to quality and design.</p>
+    </div>
+    <div class="stat-icon-box">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M6 3h12l4 6-10 12L2 9z"/>
+      </svg>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">25K+</span>
+      <h2 class="stat-title">Unique Collections</h2>
+      <p class="stat-desc">Designs as unique as their stories.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="logo-main">Aurelia</span>
+      <span class="logo-sub">Jewels</span>
+      <p>Crafting timeless jewellery since 2010. Each piece tells a story of elegance, tradition, and uncompromising quality.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"/></svg>
+        </a>
+        <a href="#" class="social-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="#" class="social-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22.54 6.42A2.78 2.78 0 0 0 20.6 4.5C18.88 4 12 4 12 4s-6.88 0-8.6.5A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.4 19.5C5.12 20 12 20 12 20s6.88 0 8.59-.5a2.78 2.78 0 0 0 1.95-1.92A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="rings.html">Rings</a></li>
+        <li><a href="necklaces.html">Necklaces</a></li>
+        <li><a href="earrings.html">Earrings</a></li>
+        <li><a href="bracelets.html">Bracelets</a></li>
+        <li><a href="collections.html">All Collections</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <ul>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">Care Instructions</a></li>
+        <li><a href="#">Shipping Info</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Track Order</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-newsletter">
+      <h4>Newsletter</h4>
+      <p style="font-size:12px;color:var(--muted-hi);line-height:1.7">Get exclusive offers straight to your inbox.</p>
+      <div class="newsletter-wrap">
+        <input type="email" placeholder="your@email.com" id="newsletterEmail">
+        <button onclick="subscribeNewsletter()">Join</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Aurelia Jewels. All rights reserved. Crafted with love in India.</p>
+    <ul class="footer-bottom-links">
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Terms of Service</a></li>
+      <li><a href="#">Cookie Policy</a></li>
+    </ul>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Mobile search toggle
+(function(){
+  const wrap = document.querySelector('.search-wrap');
+  const nav  = document.querySelector('.nav-right');
+  if(!wrap) return;
+  // Add a small search icon button for mobile
+  const iconBtn = document.createElement('button');
+  iconBtn.className = 'cart-btn mobile-search-btn';
+  iconBtn.title = 'Search';
+  iconBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+  iconBtn.style.display = 'none';
+  nav.insertBefore(iconBtn, nav.firstChild);
+  let open = false;
+  iconBtn.addEventListener('click', () => {
+    open = !open;
+    wrap.style.display = open ? 'flex' : 'none';
+    if(open) document.getElementById('search').focus();
+  });
+  function syncSearchUI() {
+    if(window.innerWidth <= 768) {
+      wrap.style.display = 'none';
+      iconBtn.style.display = 'flex';
+      open = false;
+    } else {
+      wrap.style.display = 'flex';
+      iconBtn.style.display = 'none';
+    }
+  }
+  syncSearchUI();
+  window.addEventListener('resize', syncSearchUI);
+})();
+
+
+const products = [
+  {name:'Diamond Necklace',price:'58,000',num:58000,img:'necklace.jpg',page:'necklaces.html'},
+  {name:'Gold Earring',price:'98,900',num:98900,img:'earring.jpg',page:'earrings.html'},
+  {name:'Diamond Ring',price:'5,500',num:5500,img:'ring.jpg',page:'rings.html'},
+  {name:'Luxury Bracelet',price:'1,458',num:1458,img:'bracelet.jpg',page:'bracelets.html'},
+  {name:'Royal Necklace',price:'75,000',num:75000,img:'trad.jpg',page:'necklaces.html'},
+  {name:'Elegant Earrings',price:'32,000',num:32000,img:'diamond.jpg',page:'earrings.html'},
+  {name:'Luxury Ring',price:'15,000',num:15000,img:'gold.jpg',page:'rings.html'},
+  {name:'Gold Bracelet',price:'22,000',num:22000,img:'tulip.jpg',page:'bracelets.html'},
+];
+
+// Auth helpers
+function isLoggedIn(){return !!localStorage.getItem('aurelia_user')}
+function getUser(){return JSON.parse(localStorage.getItem('aurelia_user')||'null')}
+
+// Nav user button
+function updateNavUser(){
+  const btn=document.getElementById('navUserBtn');
+  if(isLoggedIn()){
+    const u=getUser();
+    btn.textContent='Logout ('+u.name+')';
+    btn.classList.add('logged-in');
+  } else {
+    btn.textContent='Login';
+    btn.classList.remove('logged-in');
+  }
+}
+function handleNavUser(){
+  if(isLoggedIn()){
+    localStorage.removeItem('aurelia_user');
+    localStorage.removeItem('aurelia_cart');
+    showToast('Logged out successfully');
+    setTimeout(()=>location.reload(),1000);
+  } else {
+    window.location.href='login.html';
+  }
+}
+
+// Cart stored in localStorage
+function loadCart(){
+  return JSON.parse(localStorage.getItem('aurelia_cart')||'[]');
+}
+function saveCart(cart){localStorage.setItem('aurelia_cart',JSON.stringify(cart))}
+
+function updateCartCount(){
+  const cart=loadCart();
+  const total=cart.reduce((s,i)=>s+i.qty,0);
+  const el=document.getElementById('cartCount');
+  el.textContent=total;
+  el.classList.toggle('visible',total>0);
+}
+
+function goToCart(){
+  window.location.href='cart.html';
+}
+
+function addToCart(name,price,num,img){
+  let cart=JSON.parse(localStorage.getItem('aurelia_cart')||'[]');
+  const ex=cart.find(i=>i.name===name);
+  if(ex)ex.qty++;else cart.push({name,price,num,img,qty:1});
+  saveCart(cart);
+  updateCartCount();
+  showToast('Added: '+name);
+}
+
+// Search
+document.getElementById('search').addEventListener('input',function(){
+  const q=this.value.trim().toLowerCase();
+  const box=document.getElementById('searchResults');
+  if(!q){box.classList.remove('open');return;}
+  const matches=products.filter(p=>p.name.toLowerCase().includes(q));
+  box.innerHTML=matches.length===0?'<div class="search-no-result">No jewels found</div>':matches.map(p=>'<div class="search-result-item" onclick="window.location.href=\''+p.page+'\'"><img src="'+p.img+'" alt="'+p.name+'"><div class="sri-info"><h4>'+p.name+'</h4><p>₹'+p.price+'</p></div></div>').join('');
+  box.classList.add('open');
+});
+function doSearch(){
+  const q=document.getElementById('search').value.trim().toLowerCase();
+  if(!q)return;
+  const match=products.find(p=>p.name.toLowerCase().includes(q));
+  if(match)window.location.href=match.page;
+  else showToast('No results found');
+}
+document.getElementById('search').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+document.addEventListener('click',function(e){if(!e.target.closest('.search-container'))document.getElementById('searchResults').classList.remove('open');});
+
+function subscribeNewsletter(){
+  const email=document.getElementById('newsletterEmail').value.trim();
+  if(!email||!email.includes('@')){showToast('Please enter a valid email');return;}
+  showToast('Thank you for subscribing!');
+  document.getElementById('newsletterEmail').value='';
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show');}),{threshold:0.05,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+
+updateNavUser();
+updateCartCount();
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Aurelia Jewels</title>
+
+  <!-- META -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- STYLES -->
+  <link rel="stylesheet" href="accessory.css">
+
+  <!-- FONTS -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Cormorant+Garamond&family=Inter&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ================= OFFER BANNER ================= -->
+<div class="offer-banner">
+  <div class="offer-track" id="offerTrack">
+    <span>✦ Exclusive Offer — 10% Off on ALL Products ✦</span>
+    <span class="dot">|</span>
+    <span>✦ Use Code: AURELIA10 ✦</span>
+    <span class="dot">|</span>
+    <span>✦ Free Shipping Above ₹5,000 ✦</span>
+  </div>
+</div>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+
+  <!-- LOGO -->
+  <div class="logo">
+    <span class="logo-main">Aurelia</span>
+    <span class="logo-sub">Jewels</span>
+  </div>
+
+  <!-- MENU -->
+  <ul class="nav-list">
+    <li><a href="accessory.html" class="active">Home</a></li>
+    <li><a href="collections.html">Collections</a></li>
+    <li><a href = "gifting.html">Gifting</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="cart.html">Cart</a></li>
+  </ul>
+
+  <!-- RIGHT SIDE -->
+  <div class="nav-right">
+
+    <!-- SEARCH -->
+    <div class="search-container">
+      <div class="search-wrap">
+        <input type="search" id="search" placeholder="Search jewels...">
+        <button class="btn-search" onclick="doSearch()">Search</button>
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <!-- CART -->
+    <button class="cart-btn" onclick="goToCart()">
+      🛒 <span id="cartCount">0</span>
+    </button>
+
+    <!-- LOGIN -->
+    <button id="navUserBtn" onclick="handleNavUser()">Login</button>
+
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <video autoplay muted loop class="bg-video">
+    <source src="jewellery.mp4" type="video/mp4">
+  </video>
+
+  <div class="overlay"></div>
+
+  <div class="hero-content">
+    <p>Est. 2010 — Handcrafted Luxury</p>
+    <h1class="elegant-text">Timeless <em>Elegance</em></h1>
+    <a href="collections.html" class="hero-btn">Explore</a>
+  </div>
+</div>
+
+<!-- ================= PRODUCTS ================= -->
+<section class="jewel">
+  <h2>New Collections</h2>
+
+  <div class="accessories">
+
+    <!-- CARD -->
+    <div class="card">
+      <img src="necklace.jpg">
+      <h3>Diamond Necklace</h3>
+      <p>₹58,000</p>
+      <button onclick="addToCart('Diamond Necklace','58,000',58000,'necklace.jpg')">
+        Add to Cart
+      </button>
+    </div>
+
+    <div class="card">
+      <img src="earring.jpg">
+      <h3>Gold Earring</h3>
+      <p>₹98,900</p>
+      <button onclick="addToCart('Gold Earring','98,900',98900,'earring.jpg')">
+        Add to Cart
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <p>© 2025 Aurelia Jewels</p>
+</footer>
+
+<!-- ================= SCRIPT ================= -->
+<script>
+
+/* ================= DATA ================= */
+const products = [
+  {name:'Diamond Necklace', price:'58,000', num:58000, img:'necklace.jpg', page:'necklaces.html'},
+  {name:'Gold Earring', price:'98,900', num:98900, img:'earring.jpg', page:'earrings.html'}
+];
+
+/* ================= AUTH ================= */
+function isLoggedIn() {
+  return !!localStorage.getItem('aurelia_user');
+}
+
+/* ================= CART ================= */
+function loadCart() {
+  return JSON.parse(localStorage.getItem('aurelia_cart') || '[]');
+}
+
+function saveCart(cart) {
+  localStorage.setItem('aurelia_cart', JSON.stringify(cart));
+}
+
+function addToCart(name, price, num, img) {
+
+  if (!isLoggedIn()) {
+    alert("Login first");
+    return;
+  }
+
+  let cart = loadCart();
+
+  const item = cart.find(i => i.name === name);
+
+  if (item) item.qty++;
+  else cart.push({name, price, num, img, qty:1});
+
+  saveCart(cart);
+}
+
+/* ================= SEARCH ================= */
+function doSearch() {
+  const q = document.getElementById("search").value.toLowerCase();
+
+  const match = products.find(p =>
+    p.name.toLowerCase().includes(q)
+  );
+
+  if (match) window.location.href = match.page;
+  else alert("No results");
+}
+
+</script>
+
+</body>
+</html>
